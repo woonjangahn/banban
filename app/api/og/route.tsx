@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
             <div
               style={{
                 display: "flex",
-                fontSize: 40,
+                fontSize: 160,
                 fontWeight: "bold",
                 color: "white",
                 textAlign: "center",
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
           <div
             style={{
               display: "flex",
-              fontSize: 24,
+              fontSize: 48,
               color: "white",
               opacity: 0.8,
               marginTop: "auto",
