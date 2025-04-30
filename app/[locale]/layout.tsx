@@ -1,11 +1,11 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
-import ClientNavbar from "@/components/layout/ClientNavbar";
-import ClientFooter from "@/components/layout/ClientFooter";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,15 +52,18 @@ export default async function RootLayout({
     notFound();
   }
 
+  // Import messages for this locale
+  const messages = (await import(`@/messages/${locale}.json`)).default;
+
   return (
-    <html lang={locale} className="h-full">
+    <html className="h-full">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <NextIntlClientProvider>
-          <ClientNavbar />
+        <NextIntlClientProvider locale={locale} messages={messages} timeZone="Asia/Seoul">
+          <Navbar />
           <main className="flex-grow">{children}</main>
-          <ClientFooter />
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>

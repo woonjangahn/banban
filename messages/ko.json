@@ -3,6 +3,18 @@
     "title": "반반 - 즐거운 여론조사",
     "description": "여론조사를 쉽고 빠르고 간편하게"
   },
+  "profile": {
+    "title": "프로필",
+    "memberSince": "{date}부터 회원",
+    "editProfile": "프로필 수정",
+    "myPolls": "내 여론조사",
+    "myVotes": "내 투표",
+    "votes": "{count}표",
+    "youVoted": "투표: {option}",
+    "noPolls": "아직 생성한 여론조사가 없습니다.",
+    "noVotes": "아직 투표한 여론조사가 없습니다.",
+    "createPoll": "새 여론조사 만들기"
+  },
   "common": {
     "home": "홈",
     "polls": "여론조사",
@@ -116,6 +128,10 @@
     "submitError": "댓글 추가에 실패했습니다",
     "anonymous": "익명",
     "edited": " (수정됨)",
-    "reply": "답글"
+    "reply": "답글",
+    "noComments": "아직 댓글이 없습니다.",
+    "beFirst": "첫 댓글을 남겨보세요!",
+    "loginToComment": "댓글을 작성하려면 로그인하세요.",
+    "loadMore": "댓글 더 보기"
   }
 }

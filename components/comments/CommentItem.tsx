@@ -21,7 +21,7 @@ export function CommentItem({
   pollId,
   onReplyAdded,
 }: CommentItemProps) {
-  const t = useTranslations('comments');
+  const t = useTranslations("comments");
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [upvotes, setUpvotes] = useState(
     comment.reactions?.filter((r) => r.reaction_type === "upvote").length || 0,
@@ -107,15 +107,18 @@ export function CommentItem({
     },
     [onReplyAdded],
   );
-  
-  const formattedDate = new Date(comment.created_at).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
+
+  const formattedDate = new Date(comment.created_at).toLocaleDateString(
+    undefined,
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    },
+  );
 
   return (
-    <div className="pt-4">
+    <div className="pt-4 pb-4">
       <div className="flex gap-3">
         <Avatar
           url={comment.user?.avatar_url}
@@ -126,11 +129,11 @@ export function CommentItem({
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span className="font-medium">
-              {comment.user?.username || t('anonymous')}
+              {comment.user?.username || t("anonymous")}
             </span>
             <span className="text-xs text-muted-foreground">
               {formattedDate}
-              {comment.updated_at && t('edited')}
+              {comment.updated_at && t("edited")}
             </span>
           </div>
 
@@ -142,9 +145,9 @@ export function CommentItem({
               disabled={!currentUser || isSubmitting}
               className={cn(
                 "flex items-center gap-1 transition-colors",
-                userReaction === "upvote" 
-                  ? "text-green-600" 
-                  : "text-muted-foreground hover:text-green-600"
+                userReaction === "upvote"
+                  ? "text-green-600"
+                  : "text-muted-foreground hover:text-green-600",
               )}
             >
               <svg
@@ -164,9 +167,9 @@ export function CommentItem({
               disabled={!currentUser || isSubmitting}
               className={cn(
                 "flex items-center gap-1 transition-colors",
-                userReaction === "downvote" 
-                  ? "text-red-600" 
-                  : "text-muted-foreground hover:text-red-600"
+                userReaction === "downvote"
+                  ? "text-red-600"
+                  : "text-muted-foreground hover:text-red-600",
               )}
             >
               <svg
@@ -188,7 +191,7 @@ export function CommentItem({
                 onClick={() => setShowReplyForm((prev) => !prev)}
                 className="text-xs h-auto py-0 px-2"
               >
-                {t('reply')}
+                {t("reply")}
               </Button>
             )}
           </div>

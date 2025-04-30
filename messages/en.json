@@ -3,6 +3,18 @@
     "title": "BanBan - Fun Polling",
     "description": "Create, share, and analyze polls in seconds."
   },
+  "profile": {
+    "title": "Profile",
+    "memberSince": "Member since {date}",
+    "editProfile": "Edit Profile",
+    "myPolls": "My Polls",
+    "myVotes": "My Votes",
+    "votes": "{count} votes",
+    "youVoted": "You voted: {option}",
+    "noPolls": "You haven't created any polls yet.",
+    "noVotes": "You haven't voted on any polls yet.",
+    "createPoll": "Create a Poll"
+  },
   "common": {
     "home": "Home",
     "polls": "Polls",
@@ -117,6 +129,10 @@
     "submitError": "Failed to add comment",
     "anonymous": "Anonymous",
     "edited": " (edited)",
-    "reply": "Reply"
+    "reply": "Reply",
+    "noComments": "No comments yet.",
+    "beFirst": "Be the first to comment!",
+    "loginToComment": "Login to comment.",
+    "loadMore": "Load More Comments"
   }
 }

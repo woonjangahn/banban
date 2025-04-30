@@ -3,8 +3,10 @@ import { Avatar } from "@/components/ui/Avatar";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { Poll } from "@/types";
+import { getTranslations } from "next-intl/server";
 
 export default async function ProfilePage() {
+  const t = await getTranslations("profile");
   const supabase = await createClient();
 
   // Get the current user
@@ -81,10 +83,11 @@ export default async function ProfilePage() {
               {profile?.username ? `@${profile.username}` : ""}
             </p>
             <p className="text-sm text-gray-500 mt-1">
-              Member since{" "}
-              {new Date(
-                profile?.created_at || user.created_at || Date.now(),
-              ).toLocaleDateString()}
+              {t("memberSince", { 
+                date: new Date(
+                  profile?.created_at || user.created_at || Date.now()
+                ).toLocaleDateString() 
+              })}
             </p>
           </div>
         </div>
@@ -94,14 +97,14 @@ export default async function ProfilePage() {
             href="/profile/settings"
             className="px-4 py-2 bg-gray-100 rounded-md text-gray-700 hover:bg-gray-200 transition"
           >
-            Edit Profile
+            {t("editProfile")}
           </Link>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <h2 className="text-xl font-semibold mb-4">My Polls</h2>
+          <h2 className="text-xl font-semibold mb-4">{t("myPolls")}</h2>
           {userPolls && userPolls.length > 0 ? (
             <div className="space-y-4">
               {userPolls.map((poll: Poll) => (
@@ -109,7 +112,7 @@ export default async function ProfilePage() {
                   <div className="p-4 border border-gray-200 rounded-md hover:border-gray-300 transition">
                     <h3 className="font-medium">{poll.title}</h3>
                     <div className="flex justify-between mt-2 text-sm text-gray-500">
-                      <span>{poll.stats?.vote_count || 0} votes</span>
+                      <span>{t("votes", { count: poll.stats?.vote_count || 0 })}</span>
                       <span>
                         {new Date(poll.created_at).toLocaleDateString()}
                       </span>
@@ -119,7 +122,7 @@ export default async function ProfilePage() {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">You haven&apos;t created any polls yet.</p>
+            <p className="text-gray-500">{t("noPolls")}</p>
           )}
 
           <div className="mt-6">
@@ -127,13 +130,13 @@ export default async function ProfilePage() {
               href="/polls/create"
               className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
             >
-              Create a Poll
+              {t("createPoll")}
             </Link>
           </div>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-4">My Votes</h2>
+          <h2 className="text-xl font-semibold mb-4">{t("myVotes")}</h2>
           {userVotes && userVotes.length > 0 ? (
             <div className="space-y-4">
               {userVotes.map((vote) => (
@@ -141,7 +144,7 @@ export default async function ProfilePage() {
                   <div className="p-4 border border-gray-200 rounded-md hover:border-gray-300 transition">
                     <h3 className="font-medium">{vote.poll?.title}</h3>
                     <p className="text-sm text-gray-600 mt-1">
-                      You voted: {vote.option?.text}
+                      {t("youVoted", { option: vote.option?.text })}
                     </p>
                     <p className="text-xs text-gray-500 mt-2">
                       {new Date(vote.created_at).toLocaleDateString()}
@@ -151,7 +154,7 @@ export default async function ProfilePage() {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">You haven&apos;t voted on any polls yet.</p>
+            <p className="text-gray-500">{t("noVotes")}</p>
           )}
         </div>
       </div>

@@ -13,7 +13,6 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Poll } from "@/types";
 import { useTranslations } from "next-intl";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function PollCard({ poll }: { poll: Poll }) {
   const t = useTranslations();
 

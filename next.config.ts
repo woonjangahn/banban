@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       new URL(
         "https://mthttibpyjghpxjywihu.supabase.co/storage/v1/object/public/banban-public/**",
       ),
+      new URL("https://randomuser.me/api/portraits/**"),
     ],
   },
 };

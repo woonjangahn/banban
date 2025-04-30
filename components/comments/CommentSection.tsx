@@ -6,6 +6,7 @@ import { CommentForm } from "./CommentForm";
 import { Button } from "@/components/ui/Button";
 import type { Comment, User } from "@/types";
 import { createClientComponentClient } from "@/lib/supabase/client";
+import { useTranslations } from "next-intl";
 
 interface CommentSectionProps {
   pollId: string;
@@ -18,6 +19,7 @@ export function CommentSection({
   initialComments,
   currentUser,
 }: CommentSectionProps) {
+  const t = useTranslations("comments");
   const [comments, setComments] = useState<Comment[]>(initialComments || []);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -109,7 +111,7 @@ export function CommentSection({
       {comments.length === 0 ? (
         <div className="text-center py-8">
           <p className="text-muted-foreground">
-            No comments yet. {currentUser ? "Be the first to comment!" : "Login to comment."}
+            {t("noComments")} {currentUser ? t("beFirst") : t("loginToComment")}
           </p>
         </div>
       ) : (
@@ -135,7 +137,7 @@ export function CommentSection({
             disabled={isLoading}
             size="sm"
           >
-            Load More Comments
+            {t("loadMore")}
           </Button>
         </div>
       )}
