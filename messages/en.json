@@ -1,0 +1,17 @@
+{
+  "common": {
+    "home": "Home",
+    "polls": "Polls",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile"
+  },
+  "poll": {
+    "vote": "Vote",
+    "results": "View Results",
+    "comments": "Comments",
+    "for": "For",
+    "against": "Against",
+    "totalVotes": "{count} votes"
+  }
+}

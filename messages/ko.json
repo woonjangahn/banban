@@ -1,0 +1,17 @@
+{
+  "common": {
+    "home": "홈으로",
+    "polls": "여론조사",
+    "login": "로그인",
+    "register": "회원가입",
+    "profile": "프로필"
+  },
+  "poll": {
+    "vote": "투표하기",
+    "results": "결과 보기",
+    "comments": "댓글",
+    "for": "찬성",
+    "against": "반대",
+    "totalVotes": "총 {count}명 참여"
+  }
+}
