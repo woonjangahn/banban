@@ -1,18 +1,37 @@
 {
+  "metadata": {
+    "title": "BanBan - Fun Polling",
+    "description": "Create, share, and analyze polls in seconds."
+  },
   "common": {
     "home": "Home",
     "polls": "Polls",
     "login": "Login",
     "register": "Register",
     "profile": "Profile",
-    "description": "A simple polling platform built with Next.js and Supabase.",
+    "title": "BanBan",
+    "description": "Create, share, and analyze polls in seconds.",
     "navigation": "Navigation",
     "categories": "Categories",
+    "auth": {
+      "loginDescription": "Enter your email and password to log in",
+      "registerDescription": "Create a new account to join the community",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "username": "Username",
+      "usernamePlaceholder": "username",
+      "noAccount": "Don't have an account?",
+      "haveAccount": "Already have an account?"
+    },
     "category": {
       "general": "General",
       "politics": "Politics",
       "technology": "Technology",
-      "entertainment": "Entertainment"
+      "entertainment": "Entertainment",
+      "sports": "Sports",
+      "demographics": "Demographics",
+      "other": "Other"
     },
     "language": "Language",
     "languages": {
@@ -30,6 +49,7 @@
     "homepage": {
       "title": "Create polls, gather opinions, see results in real-time",
       "description": "BanBan is a simple and powerful polling platform that lets you create, share, and analyze polls in seconds.",
+      "listPolls": "Ongoing polls",
       "createPoll": "Create a Poll",
       "keyFeatures": "Key Features",
       "features": {
@@ -61,7 +81,32 @@
     "totalVotes": "{count} votes",
     "castVoteHeading": "Cast Your Vote",
     "selectOptionError": "Please select an option",
-    "voteError": "Failed to vote"
+    "voteError": "Failed to vote",
+    "noPollsFound": "No polls found",
+    "backToPolls": "← Back to polls",
+    "loginToVote": "Log in to cast your vote.",
+    "detail": {
+      "createdOn": "Created on {date}",
+      "results": "Results",
+      "votes_one": "{votes} vote",
+      "votes_other": "{votes} votes"
+    },
+    "create": {
+      "title": "Create a New Poll",
+      "backToPolls": "← Back to polls",
+      "titleLabel": "Title *",
+      "descriptionLabel": "Description (optional)",
+      "categoryLabel": "Category *",
+      "optionsLabel": "Options * ({count}/5)",
+      "optionPlaceholder": "Option {number}",
+      "addOption": "+ Add Option",
+      "cancel": "Cancel",
+      "createPoll": "Create Poll",
+      "titleRequired": "Title is required",
+      "categoryRequired": "Category is required",
+      "optionsRequired": "All options must have text",
+      "generalError": "Failed to create poll"
+    }
   },
   "comments": {
     "label": "Comment",

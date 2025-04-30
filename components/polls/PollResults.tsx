@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import type { PollOption } from "@/types";
+import { useTranslations } from "next-intl";
 
 interface PollResultsProps {
   pollId: string;
@@ -13,6 +14,7 @@ interface PollResultsProps {
 export function PollResults({ pollId, initialOptions }: PollResultsProps) {
   const [options, setOptions] = useState(initialOptions);
   const supabase = createClientComponentClient();
+  const t = useTranslations("poll.detail");
 
   useEffect(() => {
     // Subscribe to realtime votes
@@ -73,20 +75,20 @@ export function PollResults({ pollId, initialOptions }: PollResultsProps) {
   // Generate colors based on position for more consistency
   const getBarColor = (position: number) => {
     const colors = [
-      "bg-primary", 
+      "bg-primary",
       "bg-blue-500",
       "bg-indigo-500",
       "bg-violet-500",
       "bg-fuchsia-500",
-      "bg-pink-500"
+      "bg-pink-500",
     ];
-    
+
     return colors[position % colors.length];
   };
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">Results</h3>
+      <h3 className="text-lg font-medium">{t("results")}</h3>
       <div className="space-y-4">
         {options.map((option) => {
           const percentage =
@@ -102,13 +104,13 @@ export function PollResults({ pollId, initialOptions }: PollResultsProps) {
                 <div
                   className={cn(
                     "h-full transition-all duration-500",
-                    getBarColor(option.position)
+                    getBarColor(option.position),
                   )}
                   style={{ width: `${percentage || 1}%` }}
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                {option.votes} vote{option.votes !== 1 ? "s" : ""}
+                {t("votes", { votes: option.votes })}
               </p>
             </div>
           );

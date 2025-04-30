@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import ClientNavbar from "@/components/layout/ClientNavbar";
@@ -6,6 +5,7 @@ import ClientFooter from "@/components/layout/ClientFooter";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,13 +17,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "BanBan - 투표 서비스",
-  description: "Next.js 15로 만든 투표 서비스",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    console.log("Locale not found");
+    notFound();
+  }
+  const t = await getTranslations("metadata");
 
-// This is a special Next.js 15 function for getting messages
-// It won't be called during rendering, but as a separate step
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
+
 export async function generateStaticParams() {
   return [{ locale: "ko" }, { locale: "en" }];
 }
@@ -37,6 +48,7 @@ export default async function RootLayout({
 }) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
+    console.log("Locale not found");
     notFound();
   }
 

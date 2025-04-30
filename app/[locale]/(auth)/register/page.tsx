@@ -33,7 +33,7 @@ export default function RegisterPage() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">{t('register')}</CardTitle>
           <CardDescription className="text-center">
-            Create a new account to join the community
+            {t('auth.registerDescription')}
           </CardDescription>
         </CardHeader>
         
@@ -47,35 +47,35 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
-                Email
+                {t('auth.email')}
               </label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder={t('auth.emailPlaceholder')}
                 required
               />
             </div>
             
             <div className="space-y-2">
               <label htmlFor="username" className="text-sm font-medium">
-                Username
+                {t('auth.username')}
               </label>
               <Input
                 id="username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="username"
+                placeholder={t('auth.usernamePlaceholder')}
                 required
               />
             </div>
             
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium">
-                Password
+                {t('auth.password')}
               </label>
               <Input
                 id="password"
@@ -99,7 +99,7 @@ export default function RegisterPage() {
         
         <CardFooter className="flex justify-center">
           <div className="text-sm text-center">
-            <span className="text-muted-foreground">Already have an account? </span>
+            <span className="text-muted-foreground">{t('auth.haveAccount')} </span>
             <Link href="/login" className="text-primary hover:underline font-medium">
               {t('login')}
             </Link>

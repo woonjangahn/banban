@@ -22,7 +22,7 @@ export default function Home() {
               href="/polls"
               className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium"
             >
-              {t("polls")}
+              {t("homepage.listPolls")}
             </Link>
             <Link
               href="/polls/create"
@@ -59,7 +59,9 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">{t("homepage.features.creation.title")}</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                {t("homepage.features.creation.title")}
+              </h3>
               <p className="text-gray-600">
                 {t("homepage.features.creation.description")}
               </p>
@@ -82,7 +84,9 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">{t("homepage.features.results.title")}</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                {t("homepage.features.results.title")}
+              </h3>
               <p className="text-gray-600">
                 {t("homepage.features.results.description")}
               </p>
@@ -105,7 +109,9 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">{t("homepage.features.discussion.title")}</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                {t("homepage.features.discussion.title")}
+              </h3>
               <p className="text-gray-600">
                 {t("homepage.features.discussion.description")}
               </p>

@@ -5,8 +5,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { CreatePollInput } from "@/lib/validations/poll";
+import { useTranslations } from "next-intl";
 
 export default function CreatePollPage() {
+  const t = useTranslations("poll.create");
+  const categoryT = useTranslations("common.category");
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -49,13 +52,13 @@ export default function CreatePollPage() {
 
     // Simple validation
     if (!title.trim()) {
-      setError("Title is required");
+      setError(t("titleRequired"));
       setIsSubmitting(false);
       return;
     }
 
     if (!category.trim()) {
-      setError("Category is required");
+      setError(t("categoryRequired"));
       setIsSubmitting(false);
       return;
     }
@@ -63,7 +66,7 @@ export default function CreatePollPage() {
     // Validate all options have text
     const emptyOptions = options.some((option) => !option.text.trim());
     if (emptyOptions) {
-      setError("All options must have text");
+      setError(t("optionsRequired"));
       setIsSubmitting(false);
       return;
     }
@@ -90,7 +93,7 @@ export default function CreatePollPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to create poll");
+        throw new Error(data.error || t("generalError"));
       }
 
       router.push(`/polls/${data.poll.id}`);
@@ -105,11 +108,11 @@ export default function CreatePollPage() {
   return (
     <div className="container mx-auto p-6">
       <Link href="/polls" className="text-blue-500 hover:underline mb-8 block">
-        ← Back to polls
+        {t("backToPolls")}
       </Link>
 
       <div className="bg-white rounded-lg shadow-sm p-6 mb-8 max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Create a New Poll</h1>
+        <h1 className="text-3xl font-bold mb-6">{t("title")}</h1>
 
         {error && (
           <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-md">
@@ -123,7 +126,7 @@ export default function CreatePollPage() {
               htmlFor="title"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Title *
+              {t("titleLabel")}
             </label>
             <input
               id="title"
@@ -141,7 +144,7 @@ export default function CreatePollPage() {
               htmlFor="description"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Description (optional)
+              {t("descriptionLabel")}
             </label>
             <textarea
               id="description"
@@ -158,7 +161,7 @@ export default function CreatePollPage() {
               htmlFor="category"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Category *
+              {t("categoryLabel")}
             </label>
             <select
               id="category"
@@ -167,18 +170,18 @@ export default function CreatePollPage() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
-              <option value="general">General</option>
-              <option value="politics">Politics</option>
-              <option value="technology">Technology</option>
-              <option value="entertainment">Entertainment</option>
-              <option value="sports">Sports</option>
-              <option value="other">Other</option>
+              <option value="general">{categoryT("general")}</option>
+              <option value="politics">{categoryT("politics")}</option>
+              <option value="technology">{categoryT("technology")}</option>
+              <option value="entertainment">{categoryT("entertainment")}</option>
+              <option value="sports">{categoryT("sports")}</option>
+              <option value="other">{categoryT("other")}</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Options * ({options.length}/5)
+              {t("optionsLabel", { count: options.length })}
             </label>
             <div className="space-y-3">
               {options.map((option, index) => (
@@ -187,7 +190,7 @@ export default function CreatePollPage() {
                     type="text"
                     value={option.text}
                     onChange={(e) => handleOptionChange(index, e.target.value)}
-                    placeholder={`Option ${index + 1}`}
+                    placeholder={t("optionPlaceholder", { number: index + 1 })}
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                     maxLength={200}
@@ -223,7 +226,7 @@ export default function CreatePollPage() {
                 onClick={addOption}
                 className="mt-3 text-blue-500 hover:text-blue-700 text-sm font-medium"
               >
-                + Add Option
+                {t("addOption")}
               </button>
             )}
           </div>
@@ -234,14 +237,14 @@ export default function CreatePollPage() {
               variant="secondary"
               onClick={() => router.back()}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               type="submit"
               isLoading={isSubmitting}
               disabled={isSubmitting}
             >
-              Create Poll
+              {t("createPoll")}
             </Button>
           </div>
         </form>

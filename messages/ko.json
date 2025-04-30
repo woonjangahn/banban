@@ -1,25 +1,44 @@
 {
+  "metadata": {
+    "title": "반반 - 즐거운 여론조사",
+    "description": "여론조사를 쉽고 빠르고 간편하게"
+  },
   "common": {
-    "home": "홈으로",
+    "home": "홈",
     "polls": "여론조사",
     "login": "로그인",
     "register": "회원가입",
     "profile": "프로필",
-    "description": "Next.js와 Supabase로 구축된 간단한 투표 플랫폼입니다.",
-    "navigation": "네비게이션",
+    "title": "반반",
+    "description": "여론조사를 쉽고 빠르고 간편하게",
+    "navigation": "페이지",
     "categories": "카테고리",
+    "auth": {
+      "loginDescription": "이메일과 비밀번호를 입력해서 로그인하세요",
+      "registerDescription": "새 계정을 만들어 커뮤니티에 참여하세요",
+      "email": "이메일",
+      "emailPlaceholder": "admin@banban.com",
+      "password": "비밀번호",
+      "username": "사용자 이름",
+      "usernamePlaceholder": "사용자 이름",
+      "noAccount": "계정이 없으신가요?",
+      "haveAccount": "이미 계정이 있으신가요?"
+    },
     "category": {
       "general": "일반",
       "politics": "정치",
       "technology": "기술",
-      "entertainment": "엔터테인먼트"
+      "entertainment": "엔터테인먼트",
+      "sports": "스포츠",
+      "demographics": "사용자 설문",
+      "other": "기타"
     },
     "language": "언어",
     "languages": {
       "english": "English",
       "korean": "한국어"
     },
-    "copyright": "© {year} BanBan. 모든 권리 보유.",
+    "copyright": "© {year} BanBan.",
     "social": {
       "twitter": "트위터",
       "github": "깃허브"
@@ -28,14 +47,15 @@
     "settings": "설정",
     "signOut": "로그아웃",
     "homepage": {
-      "title": "투표를 만들고, 의견을 모으고, 실시간으로 결과를 확인하세요",
-      "description": "BanBan은 몇 초 만에 투표를 만들고, 공유하고, 분석할 수 있는 간단하고 강력한 투표 플랫폼입니다.",
-      "createPoll": "투표 만들기",
+      "title": "여론조사를 만들고, 의견을 모으고, 실시간으로 결과를 확인하세요",
+      "description": "반반은 몇 초 만에 여론조사를 만들고, 공유하고, 분석할 수 있는 간단하고 강력한 여론조사 플랫폼입니다.",
+      "listPolls": "진행중인 여론조사",
+      "createPoll": "새로 만들기",
       "keyFeatures": "주요 기능",
       "features": {
         "creation": {
-          "title": "쉬운 투표 생성",
-          "description": "여러 옵션과 카테고리로 커스텀 투표를 몇 초 만에 만들 수 있습니다."
+          "title": "쉬운 여론조사 생성",
+          "description": "여러 옵션과 카테고리로 여론조사를 몇 초 만에 만들 수 있습니다."
         },
         "results": {
           "title": "실시간 결과",
@@ -43,12 +63,12 @@
         },
         "discussion": {
           "title": "토론",
-          "description": "댓글과 반응으로 투표에 대한 토론을 활성화할 수 있습니다."
+          "description": "댓글과 반응으로 여론조사에 대한 토론을 활성화할 수 있습니다."
         }
       },
       "cta": {
         "title": "의견 수집을 시작할 준비가 되셨나요?",
-        "description": "이미 BanBan으로 투표를 만들고 결정을 내리는 수천 명의 사용자들과 함께하세요."
+        "description": "이미 반반으로 여론조사를 만들고 결정을 내리는 수천 명의 사용자들과 함께하세요."
       }
     }
   },
@@ -61,7 +81,31 @@
     "totalVotes": "총 {count}명 참여",
     "castVoteHeading": "투표하기",
     "selectOptionError": "옵션을 선택해주세요",
-    "voteError": "투표에 실패했습니다"
+    "voteError": "투표에 실패했습니다",
+    "noPollsFound": "투표가 없습니다",
+    "backToPolls": "← 투표 목록으로 돌아가기",
+    "loginToVote": "투표하려면 로그인하세요.",
+    "detail": {
+      "createdOn": "{date}에 생성됨",
+      "results": "결과 보기",
+      "votes": "{votes}표"
+    },
+    "create": {
+      "title": "새 여론조사 만들기",
+      "backToPolls": "← 여론조사 목록으로 돌아가기",
+      "titleLabel": "제목 *",
+      "descriptionLabel": "설명 (선택사항)",
+      "categoryLabel": "카테고리 *",
+      "optionsLabel": "선택지 * ({count}/5)",
+      "optionPlaceholder": "선택지 {number}",
+      "addOption": "+ 선택지 추가",
+      "cancel": "취소",
+      "createPoll": "여론조사 만들기",
+      "titleRequired": "제목을 입력해주세요",
+      "categoryRequired": "카테고리를 선택해주세요",
+      "optionsRequired": "모든 선택지를 입력해주세요",
+      "generalError": "투표 생성에 실패했습니다"
+    }
   },
   "comments": {
     "label": "댓글",

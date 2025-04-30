@@ -1,18 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import type { Poll } from "@/types";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/Button";
-import { Avatar } from "@/components/ui/Avatar";
+import { getTranslations } from "next-intl/server";
+import PollCard from "@/components/polls/PollCard";
 
 export default async function PollsPage() {
+  const t = await getTranslations();
   const supabase = await createClient();
 
   // Fetch polls data with their creators
@@ -31,15 +25,15 @@ export default async function PollsPage() {
 
   if (error) {
     console.error("Error fetching polls:", error);
-    return <div>Error loading polls</div>;
+    return <div>{t("common.loading")}</div>;
   }
 
   return (
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Polls</h1>
+        <h1 className="text-3xl font-bold">{t("common.polls")}</h1>
         <Link href="/polls/create">
-          <Button>Create Poll</Button>
+          <Button>{t("common.homepage.createPoll")}</Button>
         </Link>
       </div>
 
@@ -49,50 +43,9 @@ export default async function PollsPage() {
 
       {polls?.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">No polls found</p>
+          <p className="text-muted-foreground">{t("poll.noPollsFound")}</p>
         </div>
       )}
     </div>
-  );
-}
-
-// Note: This would typically be moved to its own component file
-function PollCard({ poll }: { poll: Poll }) {
-  return (
-    <Link href={`/polls/${poll.id}`} className="block h-full">
-      <Card className="h-full hover:shadow-md transition-shadow">
-        <CardHeader className="pb-2">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <Avatar
-                url={poll.creator?.avatar_url}
-                username={poll.creator?.username || "Anonymous"}
-                size="sm"
-              />
-              <span className="text-sm text-muted-foreground">
-                {poll.creator?.username || "Anonymous"}
-              </span>
-            </div>
-            <span className="bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">
-              {poll.category}
-            </span>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <CardTitle className="mb-2 text-lg line-clamp-2">
-            {poll.title}
-          </CardTitle>
-          {poll.description && (
-            <CardDescription className="line-clamp-2 mb-2">
-              {poll.description}
-            </CardDescription>
-          )}
-        </CardContent>
-        <CardFooter className="border-t pt-3 flex justify-between text-xs text-muted-foreground">
-          <span>{poll.stats?.vote_count || 0} votes</span>
-          <span>{poll.stats?.comment_count || 0} comments</span>
-        </CardFooter>
-      </Card>
-    </Link>
   );
 }

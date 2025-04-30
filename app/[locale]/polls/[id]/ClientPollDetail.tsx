@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { PollResults } from "@/components/polls/PollResults";
 import type { Poll, PollOption, Comment, User } from "@/types";
+import { useTranslations } from "next-intl";
 
 // Dynamically import components to avoid hydration issues
 const PollVoting = dynamic(
@@ -51,6 +52,7 @@ export function ClientPollDetail({
   hasVoted,
 }: ClientPollDetailProps) {
   const user = userProfile !== null;
+  const t = useTranslations();
 
   const formattedDate = new Date(poll.created_at).toLocaleDateString(
     undefined,
@@ -65,7 +67,7 @@ export function ClientPollDetail({
     <div className="container mx-auto p-6">
       <div className="mb-6">
         <Button variant="ghost" asChild className="pl-0">
-          <Link href="/polls">← Back to polls</Link>
+          <Link href="/polls">{t("poll.backToPolls")}</Link>
         </Button>
       </div>
 
@@ -74,24 +76,25 @@ export function ClientPollDetail({
           <div className="flex items-center gap-3 mb-4">
             <Avatar
               url={poll.creator?.avatar_url}
-              username={poll.creator?.username || "Anonymous"}
+              username={poll.creator?.username || t("comments.anonymous")}
               size="md"
             />
             <div>
               <div className="text-sm font-medium">
-                {poll.creator?.username || "Anonymous"}
+                {poll.creator?.username || t("comments.anonymous")}
               </div>
               <div className="text-xs text-muted-foreground">
-                {formattedDate}
+                {t("poll.detail.createdOn", { date: formattedDate })}
               </div>
             </div>
             <span className="ml-auto bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">
-              {poll.category}
+              {poll.category &&
+                t(`common.category.${poll.category.toLowerCase()}`)}
             </span>
           </div>
           <CardTitle className="text-2xl">{poll.title}</CardTitle>
           {poll.description && (
-            <CardDescription className="text-base mt-2">
+            <CardDescription className="whitespace-pre-wrap text-base mt-2">
               {poll.description}
             </CardDescription>
           )}
@@ -123,9 +126,9 @@ export function ClientPollDetail({
                       href="/login"
                       className="font-medium text-primary underline"
                     >
-                      Log in
+                      {t("common.login")}
                     </Link>{" "}
-                    to cast your vote.
+                    {t("poll.loginToVote")}
                   </p>
                 </CardContent>
               </Card>
@@ -134,7 +137,7 @@ export function ClientPollDetail({
         </CardContent>
 
         <CardFooter className="flex-col items-start border-t pt-6">
-          <h3 className="text-lg font-semibold mb-4">Comments</h3>
+          <h3 className="text-lg font-semibold mb-4">{t("poll.comments")}</h3>
           <div className="w-full">
             <CommentSection
               pollId={poll.id}

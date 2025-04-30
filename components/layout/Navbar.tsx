@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@/lib/supabase/client";
@@ -16,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import logo from "@/public/logo.png";
 
 export function Navbar() {
   const t = useTranslations("common");
@@ -78,8 +80,12 @@ export function Navbar() {
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <Link href="/" className="font-bold text-xl text-primary">
-              BanBan
+            <Link
+              href="/"
+              className="font-bold text-xl text-primary flex items-center"
+            >
+              <Image src={logo} alt="Logo" width={32} height={32} />
+              {t("title")}
             </Link>
 
             <div className="hidden md:flex space-x-2">
@@ -89,7 +95,7 @@ export function Navbar() {
                   "px-3 py-2 rounded-md text-sm font-medium transition-colors",
                   pathname.startsWith("/polls")
                     ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
                 )}
               >
                 {t("polls")}
@@ -119,11 +125,11 @@ export function Navbar() {
                     <Link href="/profile">{t("profile")}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/profile/settings">{t('settings')}</Link>
+                    <Link href="/profile/settings">{t("settings")}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
-                    {t('signOut')}
+                    {t("signOut")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -174,7 +180,7 @@ export function Navbar() {
                 "block px-3 py-2 rounded-md text-sm font-medium",
                 pathname.startsWith("/polls")
                   ? "bg-primary/10 text-primary"
-                  : "text-foreground hover:bg-accent hover:text-accent-foreground"
+                  : "text-foreground hover:bg-accent hover:text-accent-foreground",
               )}
               onClick={() => setIsMenuOpen(false)}
             >
@@ -195,7 +201,7 @@ export function Navbar() {
                   className="block px-3 py-2 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {t('settings')}
+                  {t("settings")}
                 </Link>
                 <button
                   onClick={async () => {
@@ -204,7 +210,7 @@ export function Navbar() {
                   }}
                   className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground"
                 >
-                  {t('signOut')}
+                  {t("signOut")}
                 </button>
               </>
             ) : (

@@ -32,7 +32,7 @@ export default function LoginPage() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">{t('login')}</CardTitle>
           <CardDescription className="text-center">
-            Enter your email and password to log in
+            {t('auth.loginDescription')}
           </CardDescription>
         </CardHeader>
         
@@ -46,21 +46,21 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
-                Email
+                {t('auth.email')}
               </label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder={t('auth.emailPlaceholder')}
                 required
               />
             </div>
             
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium">
-                Password
+                {t('auth.password')}
               </label>
               <Input
                 id="password"
@@ -84,7 +84,7 @@ export default function LoginPage() {
         
         <CardFooter className="flex justify-center">
           <div className="text-sm text-center">
-            <span className="text-muted-foreground">Don&apos;t have an account? </span>
+            <span className="text-muted-foreground">{t('auth.noAccount')} </span>
             <Link href="/register" className="text-primary hover:underline font-medium">
               {t('register')}
             </Link>

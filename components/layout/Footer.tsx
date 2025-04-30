@@ -11,7 +11,7 @@ export function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-lg font-semibold mb-4">BanBan</h3>
+            <h3 className="text-lg font-semibold mb-4">{t("title")}</h3>
             <p className="text-muted-foreground text-sm">{t("description")}</p>
           </div>
 
