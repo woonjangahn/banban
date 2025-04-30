@@ -2,10 +2,8 @@ import { createRouteHandlerClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { reactionSchema } from '@/lib/validations/poll';
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const body = await request.json();
     const validation = reactionSchema.safeParse({
@@ -76,10 +74,8 @@ export async function POST(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const body = await request.json();
     const validation = reactionSchema.safeParse({
@@ -147,10 +143,8 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const supabase = createRouteHandlerClient();
     

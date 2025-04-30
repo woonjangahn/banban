@@ -2,10 +2,8 @@ import { createRouteHandlerClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { voteSchema } from '@/lib/validations/poll';
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const body = await request.json();
     const validation = voteSchema.safeParse(body);

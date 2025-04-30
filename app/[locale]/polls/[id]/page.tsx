@@ -3,11 +3,12 @@ import { notFound } from "next/navigation";
 import type { Poll, PollOption, User } from "@/types";
 import { ClientPollDetail } from "./ClientPollDetail";
 
-export default async function PollDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function PollDetailPage(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
   const id = params.id;
   const supabase = await createClient();
 

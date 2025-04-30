@@ -5,6 +5,7 @@ import { CommentItem } from "./CommentItem";
 import { CommentForm } from "./CommentForm";
 import { Button } from "@/components/ui/Button";
 import type { Comment, User } from "@/types";
+import { createClientComponentClient } from "@/lib/supabase/client";
 
 interface CommentSectionProps {
   pollId: string;
@@ -61,8 +62,7 @@ export function CommentSection({
 
   // Setup realtime updates for comments
   useEffect(() => {
-    const { createClient } = require("@/lib/supabase/client");
-    const supabase = createClient();
+    const supabase = createClientComponentClient();
 
     const channel = supabase
       .channel(`poll:${pollId}:comments`)
