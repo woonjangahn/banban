@@ -1,6 +1,3 @@
-"use client";
-
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
@@ -14,27 +11,11 @@ import {
 } from "@/components/ui/card";
 import { PollResults } from "@/components/polls/PollResults";
 import type { Poll, PollOption, Comment, User } from "@/types";
-import { useTranslations } from "next-intl";
+import { PollVoting } from "@/components/polls/PollVoting";
+import { CommentSection } from "@/components/comments/CommentSection";
+import { getTranslations } from "next-intl/server";
 
-// Dynamically import components to avoid hydration issues
-const PollVoting = dynamic(
-  () => import("@/components/polls/PollVoting").then((mod) => mod.PollVoting),
-  {
-    ssr: false,
-  },
-);
-
-const CommentSection = dynamic(
-  () =>
-    import("@/components/comments/CommentSection").then(
-      (mod) => mod.CommentSection,
-    ),
-  {
-    ssr: false,
-  },
-);
-
-interface ClientPollDetailProps {
+interface PollDetailProps {
   poll: Poll & {
     creator: { username: string; avatar_url: string } | null;
   };
@@ -44,15 +25,15 @@ interface ClientPollDetailProps {
   hasVoted: boolean;
 }
 
-export function ClientPollDetail({
+export async function PollDetail({
   poll,
   optionsWithVotes,
   comments,
   userProfile,
   hasVoted,
-}: ClientPollDetailProps) {
+}: PollDetailProps) {
   const user = userProfile !== null;
-  const t = useTranslations();
+  const t = await getTranslations();
 
   const formattedDate = new Date(poll.created_at).toLocaleDateString(
     undefined,
@@ -113,7 +94,6 @@ export function ClientPollDetail({
                   pollId={poll.id}
                   options={poll.options ?? []}
                   hasVoted={hasVoted}
-                  onVoted={() => {}}
                 />
               )}
             </div>

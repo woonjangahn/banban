@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import type { CreatePollInput } from "@/lib/validations/poll";
 import { useTranslations } from "next-intl";
+import { createPoll, State } from "../actions";
+import { useActionState } from "react";
 
 export default function CreatePollPage() {
   const t = useTranslations("poll.create");
@@ -18,8 +19,9 @@ export default function CreatePollPage() {
     { text: "", position: 0 },
     { text: "", position: 1 },
   ]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  const initialState: State = { success: false, error: null };
+  const [state, formAction] = useActionState(createPoll, initialState);
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
@@ -45,66 +47,6 @@ export default function CreatePollPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
-
-    // Simple validation
-    if (!title.trim()) {
-      setError(t("titleRequired"));
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (!category.trim()) {
-      setError(t("categoryRequired"));
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Validate all options have text
-    const emptyOptions = options.some((option) => !option.text.trim());
-    if (emptyOptions) {
-      setError(t("optionsRequired"));
-      setIsSubmitting(false);
-      return;
-    }
-
-    try {
-      const pollData: CreatePollInput = {
-        title,
-        description: description || undefined,
-        category,
-        options: options.map((option) => ({
-          text: option.text,
-          position: option.position,
-        })),
-      };
-
-      const response = await fetch("/api/polls", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(pollData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || t("generalError"));
-      }
-
-      router.push(`/polls/${data.poll.id}`);
-      router.refresh();
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'An unknown error occurred');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="container mx-auto p-6">
       <Link href="/polls" className="text-blue-500 hover:underline mb-8 block">
@@ -114,13 +56,13 @@ export default function CreatePollPage() {
       <div className="bg-white rounded-lg shadow-sm p-6 mb-8 max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">{t("title")}</h1>
 
-        {error && (
+        {state.success === false && state.error && (
           <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-md">
-            {error}
+            {state.error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div>
             <label
               htmlFor="title"
@@ -130,6 +72,7 @@ export default function CreatePollPage() {
             </label>
             <input
               id="title"
+              name="title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -148,6 +91,7 @@ export default function CreatePollPage() {
             </label>
             <textarea
               id="description"
+              name="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -165,6 +109,7 @@ export default function CreatePollPage() {
             </label>
             <select
               id="category"
+              name="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -173,7 +118,9 @@ export default function CreatePollPage() {
               <option value="general">{categoryT("general")}</option>
               <option value="politics">{categoryT("politics")}</option>
               <option value="technology">{categoryT("technology")}</option>
-              <option value="entertainment">{categoryT("entertainment")}</option>
+              <option value="entertainment">
+                {categoryT("entertainment")}
+              </option>
               <option value="sports">{categoryT("sports")}</option>
               <option value="other">{categoryT("other")}</option>
             </select>
@@ -188,6 +135,7 @@ export default function CreatePollPage() {
                 <div key={index} className="flex items-center gap-2">
                   <input
                     type="text"
+                    name={`options[${index}].text`}
                     value={option.text}
                     onChange={(e) => handleOptionChange(index, e.target.value)}
                     placeholder={t("optionPlaceholder", { number: index + 1 })}
@@ -239,13 +187,7 @@ export default function CreatePollPage() {
             >
               {t("cancel")}
             </Button>
-            <Button
-              type="submit"
-              isLoading={isSubmitting}
-              disabled={isSubmitting}
-            >
-              {t("createPoll")}
-            </Button>
+            <Button type="submit">{t("createPoll")}</Button>
           </div>
         </form>
       </div>

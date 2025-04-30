@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import type { PollOption, User } from "@/types";
-import { ClientPollDetail } from "./ClientPollDetail";
+import { PollDetail } from "./PollDetail";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>;
@@ -20,20 +21,23 @@ export async function generateMetadata(props: {
 
   if (error || !poll) {
     return {
-      title: 'Poll Not Found',
-      description: 'The requested poll could not be found',
+      title: "Poll Not Found",
+      description: "The requested poll could not be found",
     };
   }
 
-  const ogUrl = new URL('/api/og', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000');
-  ogUrl.searchParams.append('title', poll.title);
+  const ogUrl = new URL(
+    "/api/og",
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  );
+  ogUrl.searchParams.append("title", poll.title);
 
   return {
     title: poll.title,
-    description: poll.description || 'Make your choice on this poll',
+    description: poll.description || "Make your choice on this poll",
     openGraph: {
       title: poll.title,
-      description: poll.description || 'Make your choice on this poll',
+      description: poll.description || "Make your choice on this poll",
       images: [
         {
           url: ogUrl.toString(),
@@ -44,9 +48,9 @@ export async function generateMetadata(props: {
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: poll.title,
-      description: poll.description || 'Make your choice on this poll',
+      description: poll.description || "Make your choice on this poll",
       images: [ogUrl.toString()],
     },
   };
@@ -156,12 +160,61 @@ export default async function PollDetailPage(props: {
   }
 
   return (
-    <ClientPollDetail
-      poll={poll}
-      optionsWithVotes={optionsWithVotes}
-      comments={comments || []}
-      userProfile={userProfile}
-      hasVoted={hasVoted}
-    />
+    <Suspense
+      fallback={
+        <div className="container mx-auto p-6 max-w-4xl">
+          <div className="space-y-8">
+            {/* Poll header skeleton */}
+            <div className="space-y-2">
+              <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-md w-3/4 animate-pulse"></div>
+              <div className="flex items-center space-x-2">
+                <div className="h-10 w-10 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-40 animate-pulse"></div>
+              </div>
+            </div>
+
+            {/* Poll options skeleton */}
+            <div className="space-y-4">
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-md w-40 animate-pulse"></div>
+              {Array(4)
+                .fill(0)
+                .map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-12 bg-gray-200 dark:bg-gray-700 rounded-md w-full animate-pulse"
+                  ></div>
+                ))}
+            </div>
+
+            {/* Comments section skeleton */}
+            <div className="space-y-4 mt-8">
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-md w-32 animate-pulse"></div>
+              <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded-md w-full animate-pulse"></div>
+
+              {Array(2)
+                .fill(0)
+                .map((_, i) => (
+                  <div key={i} className="space-y-2 p-4 border rounded-lg">
+                    <div className="flex items-center space-x-2">
+                      <div className="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-32 animate-pulse"></div>
+                    </div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-full animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-3/4 animate-pulse"></div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <PollDetail
+        poll={poll}
+        optionsWithVotes={optionsWithVotes}
+        comments={comments || []}
+        userProfile={userProfile}
+        hasVoted={hasVoted}
+      />
+    </Suspense>
   );
 }

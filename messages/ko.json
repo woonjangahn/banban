@@ -8,7 +8,7 @@
     "memberSince": "{date}부터 회원",
     "editProfile": "프로필 수정",
     "myPolls": "내 여론조사",
-    "myVotes": "내 투표",
+    "myVotes": "내가 참여한 여론조사",
     "votes": "{count}표",
     "youVoted": "투표: {option}",
     "noPolls": "아직 생성한 여론조사가 없습니다.",
@@ -78,7 +78,7 @@
         },
         "results": {
           "title": "실시간 결과",
-          "description": "라이브 업데이트 차트와 통계로 실시간으로 투표 결과를 확인할 수 있습니다."
+          "description": "라이브 업데이트 차트와 통계로 실시간으로 여론조사 결과를 확인할 수 있습니다."
         },
         "discussion": {
           "title": "토론",
@@ -101,8 +101,8 @@
     "castVoteHeading": "투표하기",
     "selectOptionError": "옵션을 선택해주세요",
     "voteError": "투표에 실패했습니다",
-    "noPollsFound": "투표가 없습니다",
-    "backToPolls": "← 투표 목록으로 돌아가기",
+    "noPollsFound": "여론조사가 없습니다",
+    "backToPolls": "← 여론조사 목록으로 돌아가기",
     "loginToVote": "투표하려면 로그인하세요.",
     "detail": {
       "createdOn": "{date}에 생성됨",
@@ -124,7 +124,7 @@
       "titleRequired": "제목을 입력해주세요",
       "categoryRequired": "카테고리를 선택해주세요",
       "optionsRequired": "모든 선택지를 입력해주세요",
-      "generalError": "투표 생성에 실패했습니다"
+      "generalError": "여론조사 생성에 실패했습니다"
     }
   },
   "comments": {

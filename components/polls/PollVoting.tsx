@@ -11,16 +11,10 @@ interface PollVotingProps {
   pollId: string;
   options: PollOption[];
   hasVoted: boolean;
-  onVoted: () => void;
 }
 
-export function PollVoting({
-  pollId,
-  options,
-  hasVoted,
-  onVoted,
-}: PollVotingProps) {
-  const t = useTranslations('poll');
+export function PollVoting({ pollId, options, hasVoted }: PollVotingProps) {
+  const t = useTranslations("poll");
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +22,7 @@ export function PollVoting({
 
   const handleVote = async () => {
     if (!selectedOption) {
-      setError(t('selectOptionError'));
+      setError(t("selectOptionError"));
       return;
     }
 
@@ -47,14 +41,13 @@ export function PollVoting({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || t('voteError'));
+        throw new Error(data.error || t("voteError"));
       }
 
       // Refresh the page to show results
       router.refresh();
-      onVoted();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : t('voteError'));
+      setError(e instanceof Error ? e.message : t("voteError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -66,7 +59,7 @@ export function PollVoting({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">{t('castVoteHeading')}</h3>
+      <h3 className="text-lg font-medium">{t("castVoteHeading")}</h3>
 
       {error && (
         <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">
@@ -82,7 +75,7 @@ export function PollVoting({
               "p-3 border rounded-md cursor-pointer transition-colors",
               selectedOption === option.id
                 ? "border-primary bg-primary/5"
-                : "border-border hover:bg-accent"
+                : "border-border hover:bg-accent",
             )}
             onClick={() => setSelectedOption(option.id)}
           >
@@ -92,7 +85,7 @@ export function PollVoting({
                   "w-4 h-4 rounded-full border flex items-center justify-center",
                   selectedOption === option.id
                     ? "border-primary"
-                    : "border-muted-foreground"
+                    : "border-muted-foreground",
                 )}
               >
                 {selectedOption === option.id && (
@@ -111,7 +104,7 @@ export function PollVoting({
         disabled={!selectedOption || isSubmitting}
         fullWidth
       >
-        {t('vote')}
+        {t("vote")}
       </Button>
     </div>
   );
