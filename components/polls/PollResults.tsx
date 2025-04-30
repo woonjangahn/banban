@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 import type { PollOption } from "@/types";
 
 interface PollResultsProps {
@@ -69,34 +70,53 @@ export function PollResults({ pollId, initialOptions }: PollResultsProps) {
   // Calculate total votes
   const totalVotes = options.reduce((sum, option) => sum + option.votes, 0);
 
+  // Generate colors based on position for more consistency
+  const getBarColor = (position: number) => {
+    const colors = [
+      "bg-primary", 
+      "bg-blue-500",
+      "bg-indigo-500",
+      "bg-violet-500",
+      "bg-fuchsia-500",
+      "bg-pink-500"
+    ];
+    
+    return colors[position % colors.length];
+  };
+
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-medium">Results</h3>
-      <div className="space-y-3">
+      <div className="space-y-4">
         {options.map((option) => {
           const percentage =
             totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0;
 
           return (
-            <div key={option.id} className="space-y-1">
+            <div key={option.id} className="space-y-1.5">
               <div className="flex justify-between text-sm">
-                <span>{option.text}</span>
-                <span>{percentage}%</span>
+                <span className="font-medium">{option.text}</span>
+                <span className="font-semibold">{percentage}%</span>
               </div>
-              <div className="bg-gray-200 h-2 rounded-full overflow-hidden">
+              <div className="bg-secondary h-2.5 rounded-full overflow-hidden">
                 <div
-                  className={`h-full ${option.position % 2 === 0 ? "bg-blue-500" : "bg-indigo-500"}`}
-                  style={{ width: `${percentage}%` }}
+                  className={cn(
+                    "h-full transition-all duration-500",
+                    getBarColor(option.position)
+                  )}
+                  style={{ width: `${percentage || 1}%` }}
                 />
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {option.votes} vote{option.votes !== 1 ? "s" : ""}
               </p>
             </div>
           );
         })}
       </div>
-      <p className="text-sm text-gray-600">Total votes: {totalVotes}</p>
+      <p className="text-sm font-medium text-muted-foreground pt-2 border-t">
+        Total votes: {totalVotes}
+      </p>
     </div>
   );
 }

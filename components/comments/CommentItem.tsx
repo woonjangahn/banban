@@ -2,8 +2,11 @@
 
 import { useCallback, useState } from "react";
 import { Avatar } from "@/components/ui/Avatar";
+import { Button } from "@/components/ui/Button";
 import { CommentReplyForm } from "./CommentReplyForm";
+import { cn } from "@/lib/utils";
 import type { Comment, User } from "@/types";
+import { useTranslations } from "next-intl";
 
 interface CommentItemProps {
   comment: Comment & { user?: User };
@@ -18,6 +21,7 @@ export function CommentItem({
   pollId,
   onReplyAdded,
 }: CommentItemProps) {
+  const t = useTranslations('comments');
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [upvotes, setUpvotes] = useState(
     comment.reactions?.filter((r) => r.reaction_type === "upvote").length || 0,
@@ -103,9 +107,15 @@ export function CommentItem({
     },
     [onReplyAdded],
   );
+  
+  const formattedDate = new Date(comment.created_at).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
 
   return (
-    <div className="border-b border-gray-100 py-4 last:border-0">
+    <div className="pt-4">
       <div className="flex gap-3">
         <Avatar
           url={comment.user?.avatar_url}
@@ -116,26 +126,31 @@ export function CommentItem({
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span className="font-medium">
-              {comment.user?.username || "Anonymous"}
+              {comment.user?.username || t('anonymous')}
             </span>
-            <span className="text-xs text-gray-500">
-              {new Date(comment.created_at).toLocaleDateString()}
-              {comment.updated_at && " (edited)"}
+            <span className="text-xs text-muted-foreground">
+              {formattedDate}
+              {comment.updated_at && t('edited')}
             </span>
           </div>
 
-          <p className="mt-1 text-gray-800">{comment.content}</p>
+          <p className="mt-1">{comment.content}</p>
 
-          <div className="mt-2 flex items-center gap-4 text-sm">
+          <div className="mt-2 flex items-center gap-4 text-xs">
             <button
               onClick={() => handleReaction("upvote")}
               disabled={!currentUser || isSubmitting}
-              className={`flex items-center gap-1 ${userReaction === "upvote" ? "text-green-600" : "text-gray-500"} hover:text-green-600`}
+              className={cn(
+                "flex items-center gap-1 transition-colors",
+                userReaction === "upvote" 
+                  ? "text-green-600" 
+                  : "text-muted-foreground hover:text-green-600"
+              )}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
+                width="14"
+                height="14"
                 fill="currentColor"
                 viewBox="0 0 16 16"
               >
@@ -147,12 +162,17 @@ export function CommentItem({
             <button
               onClick={() => handleReaction("downvote")}
               disabled={!currentUser || isSubmitting}
-              className={`flex items-center gap-1 ${userReaction === "downvote" ? "text-red-600" : "text-gray-500"} hover:text-red-600`}
+              className={cn(
+                "flex items-center gap-1 transition-colors",
+                userReaction === "downvote" 
+                  ? "text-red-600" 
+                  : "text-muted-foreground hover:text-red-600"
+              )}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
+                width="14"
+                height="14"
                 fill="currentColor"
                 viewBox="0 0 16 16"
               >
@@ -162,12 +182,14 @@ export function CommentItem({
             </button>
 
             {currentUser && (
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => setShowReplyForm((prev) => !prev)}
-                className="text-gray-500 hover:text-blue-600"
+                className="text-xs h-auto py-0 px-2"
               >
-                Reply
-              </button>
+                {t('reply')}
+              </Button>
             )}
           </div>
 

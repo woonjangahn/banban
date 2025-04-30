@@ -99,9 +99,7 @@ export function CommentSection({
   }, [pollId, comments]);
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-lg font-medium">Comments</h3>
-
+    <div className="space-y-6 w-full">
       {currentUser && (
         <div className="mb-6">
           <CommentForm pollId={pollId} onSubmit={handleNewComment} />
@@ -109,11 +107,13 @@ export function CommentSection({
       )}
 
       {comments.length === 0 ? (
-        <p className="text-gray-500">
-          No comments yet. Be the first to comment!
-        </p>
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">
+            No comments yet. {currentUser ? "Be the first to comment!" : "Login to comment."}
+          </p>
+        </div>
       ) : (
-        <div className="space-y-1 divide-y divide-gray-100">
+        <div className="space-y-4 divide-y divide-border">
           {comments.map((comment) => (
             <CommentItem
               key={comment.id}
@@ -129,10 +129,11 @@ export function CommentSection({
       {hasMore && (
         <div className="flex justify-center pt-4">
           <Button
-            variant="secondary"
+            variant="outline"
             onClick={fetchMoreComments}
             isLoading={isLoading}
             disabled={isLoading}
+            size="sm"
           >
             Load More Comments
           </Button>

@@ -4,7 +4,53 @@
     "polls": "Polls",
     "login": "Login",
     "register": "Register",
-    "profile": "Profile"
+    "profile": "Profile",
+    "description": "A simple polling platform built with Next.js and Supabase.",
+    "navigation": "Navigation",
+    "categories": "Categories",
+    "category": {
+      "general": "General",
+      "politics": "Politics",
+      "technology": "Technology",
+      "entertainment": "Entertainment"
+    },
+    "language": "Language",
+    "languages": {
+      "english": "English",
+      "korean": "한국어"
+    },
+    "copyright": "© {year} BanBan. All rights reserved.",
+    "social": {
+      "twitter": "Twitter",
+      "github": "GitHub"
+    },
+    "loading": "Loading...",
+    "settings": "Settings",
+    "signOut": "Sign out",
+    "homepage": {
+      "title": "Create polls, gather opinions, see results in real-time",
+      "description": "BanBan is a simple and powerful polling platform that lets you create, share, and analyze polls in seconds.",
+      "createPoll": "Create a Poll",
+      "keyFeatures": "Key Features",
+      "features": {
+        "creation": {
+          "title": "Easy Poll Creation",
+          "description": "Create custom polls in seconds with multiple options and categories."
+        },
+        "results": {
+          "title": "Real-time Results",
+          "description": "Watch votes come in real-time with live updating charts and statistics."
+        },
+        "discussion": {
+          "title": "Discussion",
+          "description": "Enable discussion around your polls with comments and reactions."
+        }
+      },
+      "cta": {
+        "title": "Ready to start gathering opinions?",
+        "description": "Join thousands of users already creating polls and making decisions with BanBan."
+      }
+    }
   },
   "poll": {
     "vote": "Vote",
@@ -12,6 +58,20 @@
     "comments": "Comments",
     "for": "For",
     "against": "Against",
-    "totalVotes": "{count} votes"
+    "totalVotes": "{count} votes",
+    "castVoteHeading": "Cast Your Vote",
+    "selectOptionError": "Please select an option",
+    "voteError": "Failed to vote"
+  },
+  "comments": {
+    "label": "Comment",
+    "placeholder": "Add a comment...",
+    "charCount": "{count}/{max}",
+    "submit": "Post Comment",
+    "emptyError": "Comment cannot be empty",
+    "submitError": "Failed to add comment",
+    "anonymous": "Anonymous",
+    "edited": " (edited)",
+    "reply": "Reply"
   }
 }

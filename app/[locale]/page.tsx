@@ -12,11 +12,10 @@ export default function Home() {
       <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="container mx-auto px-4 flex flex-col items-center text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900">
-            Create polls, gather opinions, see results in real-time
+            {t("homepage.title")}
           </h1>
           <p className="text-xl text-gray-600 mb-10 max-w-3xl">
-            BanBan is a simple and powerful polling platform that lets you
-            create, share, and analyze polls in seconds.
+            {t("homepage.description")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
@@ -29,7 +28,7 @@ export default function Home() {
               href="/polls/create"
               className="px-6 py-3 bg-white text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50 transition font-medium"
             >
-              Create a Poll
+              {t("homepage.createPoll")}
             </Link>
           </div>
         </div>
@@ -39,7 +38,7 @@ export default function Home() {
       <section className="w-full py-16 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
-            Key Features
+            {t("homepage.keyFeatures")}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -60,10 +59,9 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Easy Poll Creation</h3>
+              <h3 className="text-xl font-semibold mb-2">{t("homepage.features.creation.title")}</h3>
               <p className="text-gray-600">
-                Create custom polls in seconds with multiple options and
-                categories.
+                {t("homepage.features.creation.description")}
               </p>
             </div>
 
@@ -84,10 +82,9 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Real-time Results</h3>
+              <h3 className="text-xl font-semibold mb-2">{t("homepage.features.results.title")}</h3>
               <p className="text-gray-600">
-                Watch votes come in real-time with live updating charts and
-                statistics.
+                {t("homepage.features.results.description")}
               </p>
             </div>
 
@@ -108,9 +105,9 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Discussion</h3>
+              <h3 className="text-xl font-semibold mb-2">{t("homepage.features.discussion.title")}</h3>
               <p className="text-gray-600">
-                Enable discussion around your polls with comments and reactions.
+                {t("homepage.features.discussion.description")}
               </p>
             </div>
           </div>
@@ -121,11 +118,10 @@ export default function Home() {
       <section className="w-full py-16 bg-blue-50">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">
-            Ready to start gathering opinions?
+            {t("homepage.cta.title")}
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join thousands of users already creating polls and making decisions
-            with BanBan.
+            {t("homepage.cta.description")}
           </p>
           <Link
             href="/register"

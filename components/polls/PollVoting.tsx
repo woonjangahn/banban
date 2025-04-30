@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 import type { PollOption } from "@/types";
+import { useTranslations } from "next-intl";
 
 interface PollVotingProps {
   pollId: string;
@@ -18,6 +20,7 @@ export function PollVoting({
   hasVoted,
   onVoted,
 }: PollVotingProps) {
+  const t = useTranslations('poll');
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +28,7 @@ export function PollVoting({
 
   const handleVote = async () => {
     if (!selectedOption) {
-      setError("Please select an option");
+      setError(t('selectOptionError'));
       return;
     }
 
@@ -44,14 +47,14 @@ export function PollVoting({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to vote");
+        throw new Error(data.error || t('voteError'));
       }
 
       // Refresh the page to show results
       router.refresh();
       onVoted();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Failed to vote");
+      setError(e instanceof Error ? e.message : t('voteError'));
     } finally {
       setIsSubmitting(false);
     }
@@ -63,33 +66,37 @@ export function PollVoting({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">Cast Your Vote</h3>
+      <h3 className="text-lg font-medium">{t('castVoteHeading')}</h3>
 
       {error && (
-        <div className="p-3 bg-red-100 text-red-700 rounded-md">{error}</div>
+        <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">
+          {error}
+        </div>
       )}
 
       <div className="space-y-2">
         {options.map((option) => (
           <div
             key={option.id}
-            className={`p-3 border rounded-md cursor-pointer transition-colors ${
+            className={cn(
+              "p-3 border rounded-md cursor-pointer transition-colors",
               selectedOption === option.id
-                ? "border-blue-500 bg-blue-50"
-                : "border-gray-200 hover:bg-gray-50"
-            }`}
+                ? "border-primary bg-primary/5"
+                : "border-border hover:bg-accent"
+            )}
             onClick={() => setSelectedOption(option.id)}
           >
             <div className="flex items-center">
               <div
-                className={`w-4 h-4 rounded-full border ${
+                className={cn(
+                  "w-4 h-4 rounded-full border flex items-center justify-center",
                   selectedOption === option.id
-                    ? "border-blue-500"
-                    : "border-gray-400"
-                }`}
+                    ? "border-primary"
+                    : "border-muted-foreground"
+                )}
               >
                 {selectedOption === option.id && (
-                  <div className="w-2 h-2 m-[3px] rounded-full bg-blue-500" />
+                  <div className="w-2 h-2 rounded-full bg-primary" />
                 )}
               </div>
               <span className="ml-2">{option.text}</span>
@@ -104,7 +111,7 @@ export function PollVoting({
         disabled={!selectedOption || isSubmitting}
         fullWidth
       >
-        Vote
+        {t('vote')}
       </Button>
     </div>
   );

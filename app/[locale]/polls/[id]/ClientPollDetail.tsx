@@ -3,8 +3,18 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Avatar } from "@/components/ui/Avatar";
+import { Button } from "@/components/ui/Button";
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardFooter, 
+  CardHeader, 
+  CardTitle 
+} from "@/components/ui/card";
 import { PollResults } from "@/components/polls/PollResults";
 import type { Poll, PollOption, Comment, User } from "@/types";
+import { cn } from "@/lib/utils";
 
 // Dynamically import components to avoid hydration issues
 const PollVoting = dynamic(
@@ -42,66 +52,90 @@ export function ClientPollDetail({
   hasVoted,
 }: ClientPollDetailProps) {
   const user = userProfile !== null;
+  
+  const formattedDate = new Date(poll.created_at).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
   return (
     <div className="container mx-auto p-6">
-      <Link href="/polls" className="text-blue-500 hover:underline mb-8 block">
-        ← Back to polls
-      </Link>
+      <div className="mb-6">
+        <Button variant="ghost" asChild className="pl-0">
+          <Link href="/polls">← Back to polls</Link>
+        </Button>
+      </div>
 
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-        <h1 className="text-3xl font-bold mb-2">{poll.title}</h1>
+      <Card className="mb-8">
+        <CardHeader>
+          <div className="flex items-center gap-3 mb-4">
+            <Avatar
+              url={poll.creator?.avatar_url}
+              username={poll.creator?.username || "Anonymous"}
+              size="md"
+            />
+            <div>
+              <div className="text-sm font-medium">
+                {poll.creator?.username || "Anonymous"}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {formattedDate}
+              </div>
+            </div>
+            <span className="ml-auto bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">
+              {poll.category}
+            </span>
+          </div>
+          <CardTitle className="text-2xl">{poll.title}</CardTitle>
+          {poll.description && (
+            <CardDescription className="text-base mt-2">
+              {poll.description}
+            </CardDescription>
+          )}
+        </CardHeader>
+        
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              {hasVoted || !user ? (
+                <PollResults pollId={poll.id} initialOptions={optionsWithVotes} />
+              ) : (
+                <PollVoting
+                  pollId={poll.id}
+                  options={poll.options ?? []}
+                  hasVoted={hasVoted}
+                  onVoted={() => {}}
+                />
+              )}
+            </div>
 
-        {poll.description && (
-          <p className="text-gray-700 mb-6">{poll.description}</p>
-        )}
-
-        <div className="flex items-center mb-6">
-          <Avatar
-            url={poll.creator?.avatar_url}
-            username={poll.creator?.username || "Anonymous"}
-            size="sm"
-          />
-          <span className="ml-2 text-sm text-gray-600">
-            Created by {poll.creator?.username || "Anonymous"} •{" "}
-            {new Date(poll.created_at).toLocaleDateString()}
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
-          <div className="space-y-6">
-            {hasVoted || !user ? (
-              <PollResults pollId={poll.id} initialOptions={optionsWithVotes} />
-            ) : (
-              <PollVoting
-                pollId={poll.id}
-                options={poll.options ?? []}
-                hasVoted={hasVoted}
-                onVoted={() => {}}
-              />
+            {!hasVoted && !user && (
+              <Card className="bg-primary/5 border-primary/10">
+                <CardContent className="p-4">
+                  <p>
+                    <Link href="/login" className="font-medium text-primary underline">
+                      Log in
+                    </Link>{" "}
+                    to cast your vote.
+                  </p>
+                </CardContent>
+              </Card>
             )}
           </div>
-
-          {!hasVoted && !user && (
-            <div className="bg-blue-50 p-4 rounded-md">
-              <p className="text-blue-800">
-                <Link href="/login" className="font-medium underline">
-                  Log in
-                </Link>{" "}
-                to cast your vote.
-              </p>
-            </div>
-          )}
-        </div>
-
-        <div className="py-4 border-t">
-          <CommentSection
-            pollId={poll.id}
-            initialComments={comments || []}
-            currentUser={userProfile}
-          />
-        </div>
-      </div>
+        </CardContent>
+        
+        <CardFooter className="flex-col items-start border-t pt-6">
+          <h3 className="text-lg font-semibold mb-4">Comments</h3>
+          <div className="w-full">
+            <CommentSection
+              pollId={poll.id}
+              initialComments={comments || []}
+              currentUser={userProfile}
+            />
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

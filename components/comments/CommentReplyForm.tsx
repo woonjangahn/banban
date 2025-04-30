@@ -62,7 +62,7 @@ export function CommentReplyForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       {error && (
-        <div className="p-2 bg-red-100 text-red-700 rounded-md text-sm">
+        <div className="p-2 bg-destructive/10 text-destructive rounded-md text-xs">
           {error}
         </div>
       )}
@@ -72,15 +72,18 @@ export function CommentReplyForm({
           placeholder="Write a reply..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-input bg-background text-sm"
           rows={2}
           maxLength={1000}
           disabled={isSubmitting}
         ></textarea>
+        <div className="text-xs text-muted-foreground mt-1 text-right">
+          {content.length}/1000
+        </div>
       </div>
 
       <div className="flex justify-end space-x-2">
-        <Button type="button" variant="secondary" onClick={onCancel} size="sm">
+        <Button type="button" variant="outline" onClick={onCancel} size="sm">
           Cancel
         </Button>
         <Button
