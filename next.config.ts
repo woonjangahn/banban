@@ -4,7 +4,11 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["randomuser.me"],
+    remotePatterns: [
+      new URL(
+        "https://mthttibpyjghpxjywihu.supabase.co/storage/v1/object/public/banban-public/**",
+      ),
+    ],
   },
 };
 
