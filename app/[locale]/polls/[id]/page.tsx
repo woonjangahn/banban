@@ -1,13 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import type { Poll, PollOption, User } from "@/types";
+import type { PollOption, User } from "@/types";
 import { ClientPollDetail } from "./ClientPollDetail";
 
-export default async function PollDetailPage(
-  props: {
-    params: Promise<{ id: string }>;
-  }
-) {
+export default async function PollDetailPage(props: {
+  params: Promise<{ id: string }>;
+}) {
   const params = await props.params;
   const id = params.id;
   const supabase = await createClient();
@@ -60,13 +58,19 @@ export default async function PollDetailPage(
     console.error("Error fetching vote counts:", voteError);
   }
 
+  // Define vote data interface
+  interface VoteCount {
+    option_id: string;
+    count: string | number;
+  }
+
   // Add vote counts to options
   const optionsWithVotes = poll.options.map((option: PollOption) => {
     const voteCount =
-      voteData?.find((v) => v.option_id === option.id)?.count || 0;
+      voteData?.find((v: VoteCount) => v.option_id === option.id)?.count || 0;
     return {
       ...option,
-      votes: parseInt(voteCount),
+      votes: parseInt(voteCount as string),
     };
   });
 

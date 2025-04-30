@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
-import ClientNavbar from '@/components/layout/ClientNavbar';
-import ClientFooter from '@/components/layout/ClientFooter';
-import IntlProvider from '@/components/providers/IntlProvider';
+import ClientNavbar from "@/components/layout/ClientNavbar";
+import ClientFooter from "@/components/layout/ClientFooter";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,35 +25,31 @@ export const metadata: Metadata = {
 // This is a special Next.js 15 function for getting messages
 // It won't be called during rendering, but as a separate step
 export async function generateStaticParams() {
-  return [
-    { locale: 'ko' },
-    { locale: 'en' }
-  ];
+  return [{ locale: "ko" }, { locale: "en" }];
 }
 
-import { locales } from '@/i18n';
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
-  params
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  // Use a fixed locale to completely avoid the params.locale access
-  // The middleware will handle proper locale routing
-  const definedLocale = "ko";
-  
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
   return (
-    <html lang={definedLocale} className="h-full">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
-        <IntlProvider locale={definedLocale}>
+    <html lang={locale} className="h-full">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+      >
+        <NextIntlClientProvider>
           <ClientNavbar />
-          <main className="flex-grow">
-            {children}
-          </main>
+          <main className="flex-grow">{children}</main>
           <ClientFooter />
-        </IntlProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

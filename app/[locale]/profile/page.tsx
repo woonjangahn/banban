@@ -119,7 +119,7 @@ export default async function ProfilePage() {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">You haven't created any polls yet.</p>
+            <p className="text-gray-500">You haven&apos;t created any polls yet.</p>
           )}
 
           <div className="mt-6">
@@ -151,7 +151,7 @@ export default async function ProfilePage() {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">You haven't voted on any polls yet.</p>
+            <p className="text-gray-500">You haven&apos;t voted on any polls yet.</p>
           )}
         </div>
       </div>

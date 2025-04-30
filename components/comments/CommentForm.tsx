@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/Button';
-import type { Comment } from '@/types';
+import { useState } from "react";
+import { Button } from "@/components/ui/Button";
+import type { Comment } from "@/types";
 
 interface CommentFormProps {
   pollId: string;
@@ -10,45 +10,45 @@ interface CommentFormProps {
 }
 
 export function CommentForm({ pollId, onSubmit }: CommentFormProps) {
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!content.trim()) {
-      setError('Comment cannot be empty');
+      setError("Comment cannot be empty");
       return;
     }
-    
+
     setIsSubmitting(true);
     setError(null);
-    
+
     try {
       const response = await fetch(`/polls/${pollId}/comments`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ content }),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to add comment');
+        throw new Error(data.error || "Failed to add comment");
       }
-      
-      setContent('');
+
+      setContent("");
       onSubmit(data.comment);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to add comment");
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
@@ -56,7 +56,7 @@ export function CommentForm({ pollId, onSubmit }: CommentFormProps) {
           {error}
         </div>
       )}
-      
+
       <div>
         <label htmlFor="comment" className="sr-only">
           Comment
@@ -72,7 +72,7 @@ export function CommentForm({ pollId, onSubmit }: CommentFormProps) {
           disabled={isSubmitting}
         ></textarea>
       </div>
-      
+
       <div className="flex justify-end">
         <Button
           type="submit"

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { createClient } from "@/lib/supabase/client";
+import { createClientComponentClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -20,7 +20,7 @@ export default function ProfileSettingsPage() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -85,9 +85,9 @@ export default function ProfileSettingsPage() {
 
       setAvatarUrl(urlData.publicUrl);
       setSuccess("Avatar uploaded successfully");
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Error uploading avatar:", e);
-      setError(e.message || "Failed to upload avatar");
+      setError(e instanceof Error ? e.message : "Failed to upload avatar");
     } finally {
       setIsSaving(false);
     }
@@ -139,9 +139,9 @@ export default function ProfileSettingsPage() {
 
       setSuccess("Profile updated successfully");
       router.refresh();
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Error updating profile:", e);
-      setError(e.message || "Failed to update profile");
+      setError(e instanceof Error ? e.message : "Failed to update profile");
     } finally {
       setIsSaving(false);
     }

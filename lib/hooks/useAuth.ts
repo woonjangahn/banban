@@ -1,6 +1,6 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
+import { createClientComponentClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -8,7 +8,7 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = createClientComponentClient();
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -24,8 +24,8 @@ export function useAuth() {
 
       router.refresh();
       router.push("/");
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Authentication failed");
     } finally {
       setIsLoading(false);
     }
@@ -48,8 +48,8 @@ export function useAuth() {
 
       router.refresh();
       router.push("/");
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Registration failed");
     } finally {
       setIsLoading(false);
     }

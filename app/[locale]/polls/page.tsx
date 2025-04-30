@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { Poll } from "@/types";
 

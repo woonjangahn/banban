@@ -1,21 +1,19 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/Button';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import type { CreatePollInput } from '@/lib/validations/poll';
+import { Button } from "@/components/ui/Button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import type { CreatePollInput } from "@/lib/validations/poll";
 
 export default function CreatePollPage() {
-  const t = useTranslations('poll');
   const router = useRouter();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('general');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("general");
   const [options, setOptions] = useState([
-    { text: '', position: 0 },
-    { text: '', position: 1 }
+    { text: "", position: 0 },
+    { text: "", position: 1 },
   ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +26,7 @@ export default function CreatePollPage() {
 
   const addOption = () => {
     if (options.length < 5) {
-      setOptions([...options, { text: '', position: options.length }]);
+      setOptions([...options, { text: "", position: options.length }]);
     }
   };
 
@@ -38,7 +36,7 @@ export default function CreatePollPage() {
       // Update positions after removal
       const updatedOptions = newOptions.map((option, i) => ({
         ...option,
-        position: i
+        position: i,
       }));
       setOptions(updatedOptions);
     }
@@ -51,21 +49,21 @@ export default function CreatePollPage() {
 
     // Simple validation
     if (!title.trim()) {
-      setError('Title is required');
+      setError("Title is required");
       setIsSubmitting(false);
       return;
     }
 
     if (!category.trim()) {
-      setError('Category is required');
+      setError("Category is required");
       setIsSubmitting(false);
       return;
     }
 
     // Validate all options have text
-    const emptyOptions = options.some(option => !option.text.trim());
+    const emptyOptions = options.some((option) => !option.text.trim());
     if (emptyOptions) {
-      setError('All options must have text');
+      setError("All options must have text");
       setIsSubmitting(false);
       return;
     }
@@ -75,30 +73,30 @@ export default function CreatePollPage() {
         title,
         description: description || undefined,
         category,
-        options: options.map(option => ({
+        options: options.map((option) => ({
           text: option.text,
-          position: option.position
-        }))
+          position: option.position,
+        })),
       };
 
-      const response = await fetch('/api/polls', {
-        method: 'POST',
+      const response = await fetch("/api/polls", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(pollData)
+        body: JSON.stringify(pollData),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create poll');
+        throw new Error(data.error || "Failed to create poll");
       }
 
       router.push(`/polls/${data.poll.id}`);
       router.refresh();
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'An unknown error occurred');
     } finally {
       setIsSubmitting(false);
     }
@@ -121,7 +119,10 @@ export default function CreatePollPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Title *
             </label>
             <input
@@ -136,7 +137,10 @@ export default function CreatePollPage() {
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Description (optional)
             </label>
             <textarea
@@ -150,7 +154,10 @@ export default function CreatePollPage() {
           </div>
 
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Category *
             </label>
             <select
@@ -192,9 +199,18 @@ export default function CreatePollPage() {
                       className="p-2 text-red-500 hover:text-red-700"
                       aria-label="Remove option"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                        <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                        />
                       </svg>
                     </button>
                   )}
