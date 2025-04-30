@@ -1,92 +1,104 @@
-import { createServerComponentClient } from '@/lib/supabase/server';
-import { Avatar } from '@/components/ui/Avatar';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import type { Poll } from '@/types';
+import { createClient } from "@/lib/supabase/server";
+import { Avatar } from "@/components/ui/Avatar";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import type { Poll } from "@/types";
 
 export default async function ProfilePage() {
-  const supabase = createServerComponentClient();
-  
+  const supabase = await createClient();
+
   // Get the current user
-  const { data: { user } } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   // Redirect to login if no user
   if (!user) {
-    redirect('/login');
+    redirect("/login");
   }
-  
+
   // Fetch user details
   const { data: profile, error: profileError } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', user.id)
+    .from("users")
+    .select("*")
+    .eq("id", user.id)
     .single();
-    
+
   if (profileError) {
-    console.error('Error fetching profile:', profileError);
+    console.error("Error fetching profile:", profileError);
   }
-  
+
   // Fetch user's polls
   const { data: userPolls, error: pollsError } = await supabase
-    .from('polls')
-    .select(`
+    .from("polls")
+    .select(
+      `
       *,
       stats:poll_stats(vote_count, comment_count)
-    `)
-    .eq('created_by', user.id)
-    .order('created_at', { ascending: false });
-    
+    `,
+    )
+    .eq("created_by", user.id)
+    .order("created_at", { ascending: false });
+
   if (pollsError) {
-    console.error('Error fetching user polls:', pollsError);
+    console.error("Error fetching user polls:", pollsError);
   }
-  
+
   // Fetch user's votes
   const { data: userVotes, error: votesError } = await supabase
-    .from('votes')
-    .select(`
+    .from("votes")
+    .select(
+      `
       *,
       poll:polls(id, title),
       option:poll_options(text)
-    `)
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
-    
+    `,
+    )
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
   if (votesError) {
-    console.error('Error fetching user votes:', votesError);
+    console.error("Error fetching user votes:", votesError);
   }
 
   return (
     <div className="container mx-auto p-6">
       <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
         <div className="flex items-center mb-6">
-          <Avatar 
+          <Avatar
             url={profile?.avatar_url}
-            username={profile?.username || user.email?.split('@')[0] || 'User'}
+            username={profile?.username || user.email?.split("@")[0] || "User"}
             size="lg"
           />
           <div className="ml-4">
             <h1 className="text-2xl font-bold">
-              {profile?.display_name || profile?.username || user.email?.split('@')[0] || 'User'}
+              {profile?.display_name ||
+                profile?.username ||
+                user.email?.split("@")[0] ||
+                "User"}
             </h1>
             <p className="text-gray-600">
-              {profile?.username ? `@${profile.username}` : ''}
+              {profile?.username ? `@${profile.username}` : ""}
             </p>
             <p className="text-sm text-gray-500 mt-1">
-              Member since {new Date(profile?.created_at || user.created_at || Date.now()).toLocaleDateString()}
+              Member since{" "}
+              {new Date(
+                profile?.created_at || user.created_at || Date.now(),
+              ).toLocaleDateString()}
             </p>
           </div>
         </div>
-        
+
         <div className="flex justify-end">
-          <Link 
-            href="/profile/settings" 
+          <Link
+            href="/profile/settings"
             className="px-4 py-2 bg-gray-100 rounded-md text-gray-700 hover:bg-gray-200 transition"
           >
             Edit Profile
           </Link>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <h2 className="text-xl font-semibold mb-4">My Polls</h2>
@@ -98,7 +110,9 @@ export default async function ProfilePage() {
                     <h3 className="font-medium">{poll.title}</h3>
                     <div className="flex justify-between mt-2 text-sm text-gray-500">
                       <span>{poll.stats?.vote_count || 0} votes</span>
-                      <span>{new Date(poll.created_at).toLocaleDateString()}</span>
+                      <span>
+                        {new Date(poll.created_at).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
                 </Link>
@@ -107,7 +121,7 @@ export default async function ProfilePage() {
           ) : (
             <p className="text-gray-500">You haven't created any polls yet.</p>
           )}
-          
+
           <div className="mt-6">
             <Link
               href="/polls/create"
@@ -117,7 +131,7 @@ export default async function ProfilePage() {
             </Link>
           </div>
         </div>
-        
+
         <div>
           <h2 className="text-xl font-semibold mb-4">My Votes</h2>
           {userVotes && userVotes.length > 0 ? (

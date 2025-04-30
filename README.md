@@ -42,7 +42,15 @@ npm run dev
 
 ## Database Setup
 
-To set up the required database tables, execute the SQL statements found in `spec.md`.
+To set up the required database tables:
+
+1. Navigate to your Supabase project SQL editor
+2. Execute the SQL scripts in the following order:
+   - `sql/schema.sql` - Creates all tables and RLS policies
+   - `sql/triggers.sql` - Sets up triggers and functions
+   - `sql/examples.sql` (optional) - Populates tables with example data
+
+Alternatively, run the `sql/init.sql` script which includes all of the above.
 
 ## Project Structure
 
@@ -76,6 +84,11 @@ To set up the required database tables, execute the SQL statements found in `spe
     /polls           # Poll-specific components
     /comments        # Comment-specific components
     /layout          # Layout components
+  /sql               # Database SQL scripts
+    /schema.sql      # Table definitions and RLS policies
+    /triggers.sql    # Triggers and functions
+    /examples.sql    # Example data
+    /init.sql        # Initialization script
 ```
 
 ## Technologies Used

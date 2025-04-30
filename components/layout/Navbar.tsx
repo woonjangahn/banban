@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { createClientComponentClient } from '@/lib/supabase/client';
-import { Avatar } from '@/components/ui/Avatar';
-import type { User } from '@/types';
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { createClientComponentClient } from "@/lib/supabase/client";
+import { Avatar } from "@/components/ui/Avatar";
+import type { User } from "@/types";
 
 export function Navbar() {
-  const t = useTranslations('common');
+  const t = useTranslations("common");
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,44 +19,46 @@ export function Navbar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data: { user: authUser } } = await supabase.auth.getUser();
-        
+        const {
+          data: { user: authUser },
+        } = await supabase.auth.getUser();
+
         if (authUser) {
           const { data } = await supabase
-            .from('users')
-            .select('*')
-            .eq('id', authUser.id)
+            .from("users")
+            .select("*")
+            .eq("id", authUser.id)
             .single();
-            
+
           if (data) {
             setUser(data);
           }
         }
       } catch (error) {
-        console.error('Error fetching user:', error);
+        console.error("Error fetching user:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     fetchUser();
-    
+
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session?.user) {
-          fetchUser();
-        } else {
-          setUser(null);
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        fetchUser();
+      } else {
+        setUser(null);
       }
-    );
-    
+    });
+
     return () => {
       subscription.unsubscribe();
     };
   }, [supabase]);
-  
+
   return (
     <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3">
@@ -65,21 +67,21 @@ export function Navbar() {
             <Link href="/" className="font-bold text-xl text-blue-600">
               BanBan
             </Link>
-            
+
             <div className="hidden md:flex space-x-4">
-              <Link 
-                href="/polls" 
+              <Link
+                href="/polls"
                 className={`px-3 py-2 rounded-md ${
-                  pathname.startsWith('/polls') 
-                    ? 'bg-blue-50 text-blue-600' 
-                    : 'text-gray-600 hover:bg-gray-50'
+                  pathname.startsWith("/polls")
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-600 hover:bg-gray-50"
                 }`}
               >
-                {t('polls')}
+                {t("polls")}
               </Link>
             </div>
           </div>
-          
+
           <div className="hidden md:flex items-center space-x-4">
             {isLoading ? (
               <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
@@ -91,31 +93,31 @@ export function Navbar() {
                 >
                   <Avatar
                     url={user.avatar_url}
-                    username={user.username || 'User'}
+                    username={user.username || "User"}
                     size="sm"
                   />
                   <span className="text-sm font-medium text-gray-700">
-                    {user.display_name || user.username || 'User'}
+                    {user.display_name || user.username || "User"}
                   </span>
                 </button>
-                
+
                 {isMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                    <Link 
-                      href="/profile" 
+                    <Link
+                      href="/profile"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      {t('profile')}
+                      {t("profile")}
                     </Link>
-                    <Link 
-                      href="/profile/settings" 
+                    <Link
+                      href="/profile/settings"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Settings
                     </Link>
-                    <button 
+                    <button
                       onClick={async () => {
                         await supabase.auth.signOut();
                         setIsMenuOpen(false);
@@ -130,67 +132,78 @@ export function Navbar() {
               </div>
             ) : (
               <>
-                <Link 
-                  href="/login" 
+                <Link
+                  href="/login"
                   className="text-gray-600 hover:text-gray-900"
                 >
-                  {t('login')}
+                  {t("login")}
                 </Link>
-                <Link 
-                  href="/register" 
+                <Link
+                  href="/register"
                   className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                 >
-                  {t('register')}
+                  {t("register")}
                 </Link>
               </>
             )}
           </div>
-          
+
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-500 hover:text-gray-700 focus:outline-none"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
               </svg>
             </button>
           </div>
         </div>
-        
+
         {/* Mobile menu */}
         {isMenuOpen && (
           <div className="md:hidden pt-2 pb-3 space-y-1">
-            <Link 
-              href="/polls" 
+            <Link
+              href="/polls"
               className={`block px-3 py-2 rounded-md ${
-                pathname.startsWith('/polls') 
-                  ? 'bg-blue-50 text-blue-600' 
-                  : 'text-gray-600 hover:bg-gray-50'
+                pathname.startsWith("/polls")
+                  ? "bg-blue-50 text-blue-600"
+                  : "text-gray-600 hover:bg-gray-50"
               }`}
               onClick={() => setIsMenuOpen(false)}
             >
-              {t('polls')}
+              {t("polls")}
             </Link>
-            
+
             {user ? (
               <>
-                <Link 
-                  href="/profile" 
+                <Link
+                  href="/profile"
                   className="block px-3 py-2 rounded-md text-gray-600 hover:bg-gray-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {t('profile')}
+                  {t("profile")}
                 </Link>
-                <Link 
-                  href="/profile/settings" 
+                <Link
+                  href="/profile/settings"
                   className="block px-3 py-2 rounded-md text-gray-600 hover:bg-gray-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Settings
                 </Link>
-                <button 
+                <button
                   onClick={async () => {
                     await supabase.auth.signOut();
                     setIsMenuOpen(false);
@@ -203,19 +216,19 @@ export function Navbar() {
               </>
             ) : (
               <>
-                <Link 
-                  href="/login" 
+                <Link
+                  href="/login"
                   className="block px-3 py-2 rounded-md text-gray-600 hover:bg-gray-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {t('login')}
+                  {t("login")}
                 </Link>
-                <Link 
-                  href="/register" 
+                <Link
+                  href="/register"
                   className="block px-3 py-2 rounded-md text-gray-600 hover:bg-gray-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {t('register')}
+                  {t("register")}
                 </Link>
               </>
             )}
