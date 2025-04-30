@@ -4,17 +4,16 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardFooter, 
-  CardHeader, 
-  CardTitle 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { PollResults } from "@/components/polls/PollResults";
 import type { Poll, PollOption, Comment, User } from "@/types";
-import { cn } from "@/lib/utils";
 
 // Dynamically import components to avoid hydration issues
 const PollVoting = dynamic(
@@ -52,12 +51,15 @@ export function ClientPollDetail({
   hasVoted,
 }: ClientPollDetailProps) {
   const user = userProfile !== null;
-  
-  const formattedDate = new Date(poll.created_at).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+
+  const formattedDate = new Date(poll.created_at).toLocaleDateString(
+    undefined,
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    },
+  );
 
   return (
     <div className="container mx-auto p-6">
@@ -94,12 +96,15 @@ export function ClientPollDetail({
             </CardDescription>
           )}
         </CardHeader>
-        
+
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               {hasVoted || !user ? (
-                <PollResults pollId={poll.id} initialOptions={optionsWithVotes} />
+                <PollResults
+                  pollId={poll.id}
+                  initialOptions={optionsWithVotes}
+                />
               ) : (
                 <PollVoting
                   pollId={poll.id}
@@ -114,7 +119,10 @@ export function ClientPollDetail({
               <Card className="bg-primary/5 border-primary/10">
                 <CardContent className="p-4">
                   <p>
-                    <Link href="/login" className="font-medium text-primary underline">
+                    <Link
+                      href="/login"
+                      className="font-medium text-primary underline"
+                    >
                       Log in
                     </Link>{" "}
                     to cast your vote.
@@ -124,7 +132,7 @@ export function ClientPollDetail({
             )}
           </div>
         </CardContent>
-        
+
         <CardFooter className="flex-col items-start border-t pt-6">
           <h3 className="text-lg font-semibold mb-4">Comments</h3>
           <div className="w-full">

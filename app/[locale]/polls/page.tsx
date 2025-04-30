@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/Button";
-import { cn } from "@/lib/utils";
 import { Avatar } from "@/components/ui/Avatar";
 
 export default async function PollsPage() {
@@ -80,7 +79,9 @@ function PollCard({ poll }: { poll: Poll }) {
           </div>
         </CardHeader>
         <CardContent>
-          <CardTitle className="mb-2 text-lg line-clamp-2">{poll.title}</CardTitle>
+          <CardTitle className="mb-2 text-lg line-clamp-2">
+            {poll.title}
+          </CardTitle>
           {poll.description && (
             <CardDescription className="line-clamp-2 mb-2">
               {poll.description}
