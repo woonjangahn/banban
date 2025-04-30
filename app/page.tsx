@@ -1,6 +1,6 @@
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
 export default function RootPage() {
   // Redirect to the default locale (ko)
-  redirect('/ko');
+  redirect("/ko/polls");
 }

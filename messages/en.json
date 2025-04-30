@@ -25,6 +25,12 @@
     "description": "Create, share, and analyze polls in seconds.",
     "navigation": "Navigation",
     "categories": "Categories",
+    "sortBy": "Sort by",
+    "sort": {
+      "newest": "Newest",
+      "votes": "Most Votes",
+      "comments": "Most Comments"
+    },
     "auth": {
       "loginDescription": "Enter your email and password to log in",
       "registerDescription": "Create a new account to join the community",
@@ -37,6 +43,7 @@
       "haveAccount": "Already have an account?"
     },
     "category": {
+      "all": "All",
       "general": "General",
       "politics": "Politics",
       "technology": "Technology",
@@ -101,7 +108,8 @@
       "createdOn": "Created on {date}",
       "results": "Results",
       "votes_one": "{votes} vote",
-      "votes_other": "{votes} votes"
+      "votes_other": "{votes} votes",
+      "totalVotes": "{count} votes"
     },
     "create": {
       "title": "Create a New Poll",

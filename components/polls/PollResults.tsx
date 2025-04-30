@@ -117,7 +117,7 @@ export function PollResults({ pollId, initialOptions }: PollResultsProps) {
         })}
       </div>
       <p className="text-sm font-medium text-muted-foreground pt-2 border-t">
-        Total votes: {totalVotes}
+        {t("totalVotes", { count: totalVotes })}
       </p>
     </div>
   );

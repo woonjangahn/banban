@@ -25,6 +25,12 @@
     "description": "여론조사를 쉽고 빠르고 간편하게",
     "navigation": "페이지",
     "categories": "카테고리",
+    "sortBy": "정렬 기준",
+    "sort": {
+      "newest": "최신순",
+      "votes": "투표수",
+      "comments": "댓글수"
+    },
     "auth": {
       "loginDescription": "이메일과 비밀번호를 입력해서 로그인하세요",
       "registerDescription": "새 계정을 만들어 커뮤니티에 참여하세요",
@@ -37,6 +43,7 @@
       "haveAccount": "이미 계정이 있으신가요?"
     },
     "category": {
+      "all": "전체",
       "general": "일반",
       "politics": "정치",
       "technology": "기술",
@@ -100,7 +107,8 @@
     "detail": {
       "createdOn": "{date}에 생성됨",
       "results": "결과 보기",
-      "votes": "{votes}표"
+      "votes": "{votes}표",
+      "totalVotes": "{count}명 참여"
     },
     "create": {
       "title": "새 여론조사 만들기",

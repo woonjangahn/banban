@@ -4,13 +4,22 @@ import type { Poll } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { getTranslations } from "next-intl/server";
 import PollCard from "@/components/polls/PollCard";
+import { Suspense } from "react";
 
-export default async function PollsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function PollsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; sort?: string }>;
+}) {
   const t = await getTranslations();
   const supabase = await createClient();
 
-  // Fetch polls data with their creators
-  const { data: polls, error } = await supabase
+  const { category, sort } = await searchParams;
+
+  // Create the query
+  let query = supabase
     .from("polls")
     .select(
       `
@@ -19,14 +28,60 @@ export default async function PollsPage() {
       stats:poll_stats!poll_id(vote_count, comment_count)
     `,
     )
-    .eq("is_active", true)
-    .order("created_at", { ascending: false })
-    .limit(20);
+    .eq("is_active", true);
+
+  // Apply category filter if provided
+  if (category && category !== "all") {
+    query = query.eq("category", category);
+  }
+
+  // For all cases, start with the default sort by creation date
+  query = query.order("created_at", { ascending: false });
+
+  // Limit results
+  query = query.limit(20);
+
+  // Execute the query
+  const { data: polls, error } = await query;
+
+  console.log("Polls fetched:", polls?.length, "Error:", error);
+
+  // Sort results client-side based on votes or comments if needed
+  let sortedPolls = polls;
+
+  if (polls && polls.length > 0) {
+    if (sort === "votes") {
+      // Sort by vote count (highest first)
+      sortedPolls = [...polls].sort((a, b) => {
+        const votesA = a.stats?.vote_count || 0;
+        const votesB = b.stats?.vote_count || 0;
+        return votesB - votesA;
+      });
+    } else if (sort === "comments") {
+      // Sort by comment count (highest first)
+      sortedPolls = [...polls].sort((a, b) => {
+        const commentsA = a.stats?.comment_count || 0;
+        const commentsB = b.stats?.comment_count || 0;
+        return commentsB - commentsA;
+      });
+    }
+  }
 
   if (error) {
     console.error("Error fetching polls:", error);
     return <div>{t("common.loading")}</div>;
   }
+
+  // Get unique categories from the codebase (hardcoded for now based on the i18n file)
+  const categories = [
+    "general",
+    "technology",
+    "entertainment",
+    "sports",
+    "politics",
+    "demographics",
+    "other",
+  ];
 
   return (
     <div className="container mx-auto p-6">
@@ -37,15 +92,100 @@ export default async function PollsPage() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {polls?.map((poll: Poll) => <PollCard key={poll.id} poll={poll} />)}
+      <div className="mb-6 flex flex-col md:flex-row gap-4">
+        {/* Category filter */}
+        <div className="md:w-1/2">
+          <label className="block text-sm font-medium mb-2">
+            {t("common.categories")}:
+          </label>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/polls"
+              className={`px-3 py-1 text-sm rounded-full ${
+                !category || category === "all"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              }`}
+            >
+              {t("common.category.all") || "All"}
+            </Link>
+            {categories.map((cat) => (
+              <Link
+                key={cat}
+                href={`/polls?category=${cat}${sort ? `&sort=${sort}` : ""}`}
+                className={`px-3 py-1 text-sm rounded-full ${
+                  category === cat
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {t(`common.category.${cat}`)}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Sort options */}
+        <div className="md:w-1/2">
+          <label className="block text-sm font-medium mb-2">
+            {t("common.sortBy") || "Sort by"}:
+          </label>
+          <div className="flex gap-2">
+            <Link
+              href={category ? `/polls?category=${category}` : "/polls"}
+              className={`px-3 py-1 text-sm rounded-full ${
+                !sort || sort === "newest"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              }`}
+            >
+              {t("common.sort.newest") || "Newest"}
+            </Link>
+            <Link
+              href={
+                category
+                  ? `/polls?category=${category}&sort=votes`
+                  : "/polls?sort=votes"
+              }
+              className={`px-3 py-1 text-sm rounded-full ${
+                sort === "votes"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              }`}
+            >
+              {t("common.sort.votes") || "Most Votes"}
+            </Link>
+            <Link
+              href={
+                category
+                  ? `/polls?category=${category}&sort=comments`
+                  : "/polls?sort=comments"
+              }
+              className={`px-3 py-1 text-sm rounded-full ${
+                sort === "comments"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              }`}
+            >
+              {t("common.sort.comments") || "Most Comments"}
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {polls?.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">{t("poll.noPollsFound")}</p>
+      <Suspense fallback={<div>{t("common.loading")}</div>}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedPolls?.map((poll: Poll) => (
+            <PollCard key={poll.id} poll={poll} />
+          ))}
         </div>
-      )}
+
+        {sortedPolls?.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">{t("poll.noPollsFound")}</p>
+          </div>
+        )}
+      </Suspense>
     </div>
   );
 }

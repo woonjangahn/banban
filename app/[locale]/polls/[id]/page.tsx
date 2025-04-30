@@ -2,6 +2,55 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import type { PollOption, User } from "@/types";
 import { ClientPollDetail } from "./ClientPollDetail";
+import { Metadata } from "next";
+
+export async function generateMetadata(props: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const id = params.id;
+  const supabase = await createClient();
+
+  // Fetch poll data for metadata
+  const { data: poll, error } = await supabase
+    .from("polls")
+    .select("title, description")
+    .eq("id", id)
+    .single();
+
+  if (error || !poll) {
+    return {
+      title: 'Poll Not Found',
+      description: 'The requested poll could not be found',
+    };
+  }
+
+  const ogUrl = new URL('/api/og', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000');
+  ogUrl.searchParams.append('title', poll.title);
+
+  return {
+    title: poll.title,
+    description: poll.description || 'Make your choice on this poll',
+    openGraph: {
+      title: poll.title,
+      description: poll.description || 'Make your choice on this poll',
+      images: [
+        {
+          url: ogUrl.toString(),
+          width: 1200,
+          height: 630,
+          alt: poll.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: poll.title,
+      description: poll.description || 'Make your choice on this poll',
+      images: [ogUrl.toString()],
+    },
+  };
+}
 
 export default async function PollDetailPage(props: {
   params: Promise<{ id: string }>;
